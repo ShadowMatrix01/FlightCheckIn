@@ -5,6 +5,7 @@
  * @A simple program that demonstrates how a flight checkin would work in Java. */
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.time.LocalDateTime; //Important for greeting the user and verification purposes! Date and time  is imported using the time package.
 import java.time.format.DateTimeFormatter;  //Important for formatting the date and time properly
 public class FlightCheckIn
@@ -13,8 +14,9 @@ public class FlightCheckIn
     ArrayList<Object> details= new ArrayList<>();
     public static void main (String[]args) {
     Ticket ticket_1= new Ticket();
-    ticket_1.setAirline("USA AIRPATH-East");
-    try (Scanner faa=new Scanner(System.in)) {
+    ticket_1.setAirline("USA Regional AIRPATH-Northeast");
+    Scanner faa=new Scanner(System.in); //Scanner moved for scope purposes
+    try {
         LocalDateTime dateAndTime=LocalDateTime.now(); //Gets the date and time
         DateTimeFormatter dateAndTimeForm = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss"); //Formats the date and time into Month-Day-Year and readable hour, minute, and seconds
         String dateAndTime2=dateAndTime.format(dateAndTimeForm); //the formated date and time is saved to dateAndTime2 using the .format() method.
@@ -27,10 +29,10 @@ public class FlightCheckIn
         System.out.println("Enter your full name as it appears on your passport and if applicable, visa: ");
         String namePass=faa.nextLine();
         //String datePass=faa.nextLine(); Not necessary, date is already implemented.
-        System.out.println("Enter the departing location:");
-        String depLocPass=faa.nextLine();
-        System.out.println("Enter the arriving location:");
-        String arrLocPass=faa.nextLine();
+        //System.out.println("Enter the departing location:"); Will be omitted as departing location will be implemented using the airprot code, less room for user error.
+       // String depLocPass=faa.nextLine();
+        //.out.println("Enter the arriving location:");
+       // String arrLocPass=faa.nextLine();
         System.out.println("Enter the departing airport code (ex.) ATL for (Hartsfield-Jackson Atlanta International Airport):");
         String depAirCode=faa.nextLine();
         System.out.println("Enter the arriving airport code: ");
@@ -42,17 +44,17 @@ public class FlightCheckIn
         ticket_1.setBaggage(bag);
         ticket_1.setCarryOn(carryOnPack);
         ticket_1.setName(namePass);
-        ticket_1.setDepartingLocation(depLocPass);
-        ticket_1.setArrivingLocation(arrLocPass);
+        //ticket_1.setDepartingLocation(depLocPass);
+        //ticket_1.setArrivingLocation(arrLocPass);
         ticket_1.setDepartingAirportCode(depAirCode);
         ticket_1.setArrivingAirportCode(arrAirCode);
       //  details.add(ticket_1); Issue with adding to arrayList, will analyze further.if (carryOnPack > 1) {
         ticket_1.setPriceCarryOn(carryOnPack);
         ticket_1.setPriceBaggageOn(bag);
         ticket_1.printTicket();
-    } catch (Exception e) { //Exception in case of an incorrect input.
+    } catch (InputMismatchException e) { //Exception in case of an incorrect input.
     System.out.println("" + e.getMessage());
-    // Need to add a way to discard incorrect information.
+    faa.next();
    }
  }
 }
