@@ -1,12 +1,13 @@
 
 /**
  * @Jhan Gomez
- * @1.0.1 (Version)
+ * @1.0.2 (Version)
  * @A class that allows information for the ticket to be printed correctly. */
 import java.text.NumberFormat;
 import java.util.ArrayList;
 public class Ticket {
 private String name, flightNumber, airline, date, departingLocation, arrivingLocation, departingAirportCode, arrivingAirportCode;
+//departingLocation and arrivingLocation will be removed.
 private int baggage, carryOn;
 private int price_1, price_2;
 NumberFormat priceChecker=NumberFormat.getCurrencyInstance(); //To properly demonstrate the price

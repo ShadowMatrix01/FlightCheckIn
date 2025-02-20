@@ -1,7 +1,7 @@
 
 /**
  * @Jhan Gomez
- * @Version 1.0.1 (a version number or a date)
+ * @Version 1.0.2 (a version number or a date)
  * @A simple program that demonstrates how a flight checkin would work in Java. */
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -56,5 +56,6 @@ public class FlightCheckIn
     System.out.println("" + e.getMessage());
     faa.next();
    }
+   faa.close();
  }
 }
