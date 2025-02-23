@@ -1,27 +1,43 @@
 
 /**
  * @Jhan Gomez
- * @1.0.2 (Version)
- * @A class that allows information for the ticket to be printed correctly. */
+ * @1.0.3 (Version)
+ * @A class that allows information for the ticket to be printed correctly.  */
 import java.text.NumberFormat;
-import java.util.ArrayList;
+import java.util.HashMap; //A hashmap allows values to be stored with keys
+//import java.util.ArrayList; Not needed anymore
+import java.util.Map; //Is a better and more efficient implementation compared to before.
 public class Ticket {
-private String name, flightNumber, airline, date, departingLocation, arrivingLocation, departingAirportCode, arrivingAirportCode;
+protected Map<String, String> departingAndCode=new HashMap<>();
+protected Map<String, String> arrivingAndCode=new HashMap<>();
+protected boolean arrivingCodeValid, departingCodeValid;
+protected String name, flightNumber, airline, date, departingAirportCode, arrivingAirportCode;
 //departingLocation and arrivingLocation will be removed.
-private int baggage, carryOn;
-private int price_1, price_2;
+protected int baggage, carryOn;
+protected int price_1, price_2;
 NumberFormat priceChecker=NumberFormat.getCurrencyInstance(); //To properly demonstrate the price
  //Major airports list: https://www.cheapflights.co.uk/news/airports-in-north-east-usa
-String [] majorAirportsNortheast={"Atlantic City International", "Baltimore/Washington International Thurgood Marshall",
-        "Bradley International Airport", 
-        "Buffalo Niagara International Airport", "John F Kennedy International Airport", 
-    "La Guardia", "Logan International Airport", "Long Island MacArthur Airport", 
-    "Manchester – Boston Regional Airport", "Newark Liberty International Airport", 
-    "Philadelphia International Airport", "Pittsburgh International Airport",
-    "Portland International Jetport", "Ronald Reagan Washington National Airport","Richmond International","T.F. Green Airport",
-    "Washington Dulles International Airport"};
-ArrayList<String> departingAndCode= new ArrayList<>(); //Allows both the airport and its IATA code to be returned.
-ArrayList <String> arrivingAndCode= new ArrayList<>();
+ //IMPORTANT: AIRPORT CODE FOR BUFFALO IS INCORRECT IN THE ARTICLE AND WAS THUS CHANGED
+String [] majorAirportsNortheast=
+     { //In alphabetical order for clarity
+    "\n(ACY) Atlantic City International Airport, Egg Harbor Township, New Jersey, U.S.", 
+    "(BDL) Bradley International Airport, Windsor Locks, Connecticut, U.S.", 
+    "(BOS) Boston Logan International Airport, Boston/Winthrop, Massachusetts, U.S.", 
+    "(BUF) Buffalo Niagara International Airport, Cheektowaga, New York, U.S.", 
+    "(BWI) Baltimore/Washington International Thurgood Marshall Airport, Anne Arundel County, Maryland, U.S.",
+    "(DCA) Ronald Reagan Washington National Airport, Crystal City, Arlington County, Virginia, U.S.", 
+    "(EWR) Newark Liberty International Airport, Newark/Elizabeth, New Jersey, U.S. ", 
+    "(IAD) Washington Dulles International Airport, Dulles, Virginia, U.S.",
+    "(ISP) Long Island MacArthur Airport, Ronkonkoma, New York, U.S.", 
+    "(JFK) John F Kennedy International Airport, Jamaica, Queens, New York City, U.S.", 
+    "(LGA) La Guardia Airport, East Elmhurst, Queens, New York City, New York, U.S. ", 
+    "(MHT) Manchester – Boston Regional Airport, Manchester/Londonderry, New Hampshire, U.S. ",
+    "(PIT) Pittsburgh International Airport, Allegheny County, Pennsylvania, U.S.",
+    "(PHL) Philadelphia International Airport, Philadelphia / Tinicum Township, Delaware County, Pennsylvania, U.S.", 
+    "(PVD) Rhode Island-T.F. Green Airport, Warwick, Rhode Island U.S.",
+    "(RIC) Richmond International Airport, Sandston, Virginia, U.S.",
+    "(PWM) Portland International Jetport, Portland, Oregon, U.S.\n"
+    };
     public void setBaggage(int bags) {
         baggage=bags;
     }
@@ -52,79 +68,147 @@ ArrayList <String> arrivingAndCode= new ArrayList<>();
     public String getDate() {
         return date;
     }
-    // public void setDepartingLocation (String airDepLoc) {
-    //    departingLocation=airDepLoc;
-    //}
-    //public String getDepartingLocation() {
-       // return departingLocation;
-    //}
-    // public void setArrivingLocation (String airArrLoc) {
-    //    arrivingLocation=airArrLoc;
-   // }
-    //public String getArrivingLocation() {
-      //  return arrivingLocation;
-   // }
-     public void setDepartingAirportCode (String airDepAirCo) { //Modified to automatically get the departure location based on the users 
-        switch (airDepAirCo) { //Switch statements based on airport code.
-            case "ACY": departingAndCode.add("Atlantic City International (ACY)");
-            break;
-            case "BWI": departingAndCode.add("");
-            break;
-            case "BDL": departingAndCode.add("");
-            break;
-            case "BFN": departingAndCode.add("");
-            break;
-            case "JFK": departingAndCode.add("");
-            break;
-            case "LGA": departingAndCode.add("");
-            break;
-            case "BOS": departingAndCode.add("");
-            break;
-            case "ISP": departingAndCode.add("");
-            break;
-            case "MHT": departingAndCode.add("");
-            break;
-            case "EWR": departingAndCode.add("");
-            break;
-            case "PHL": departingAndCode.add("");
-            break;
-            case "PIT": departingAndCode.add("");
-            break;
-            case "PWM": departingAndCode.add("");
-            break;
-            case "DCA": departingAndCode.add("");
-            break;
-            case "RIC": departingAndCode.add("");
-            break;
-            case "PVD": departingAndCode.add("");
-            break;
-            case "IAD": departingAndCode.add("");
-            break;
+    public boolean setDepartingAirportCode (String airDepAirCo) { //Modified to automatically get the departure location based on the users 
+         departingAirportCode=airDepAirCo;
+         switch (airDepAirCo) { //Switch statements based on airport code.
+            case "ACY": departingAndCode.put("ACY", "Atlantic City International Airport, Egg Harbor Township, New Jersey, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "BWI": departingAndCode.put("BWI", "Baltimore/Washington International Thurgood Marshall Airport, Anne Arundel County, Maryland, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "BDL": departingAndCode.put("BDL", "Bradley International Airport, Windsor Locks, Connecticut, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "BUF": departingAndCode.put("BUF", "Buffalo Niagara International Airport, Cheektowaga, New York, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "JFK": departingAndCode.put("JFK", "John F Kennedy International Airport, Jamaica, Queens, New York City, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "LGA": departingAndCode.put("LGA", "LaGuardia Airport, East Elmhurst, Queens, New York City, New York, U.S. ");
+            departingCodeValid=true;
+            return true;
+            case "BOS": departingAndCode.put("BOS", "Boston Logan International Airport, Boston/Winthrop, Massachusetts, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "ISP": departingAndCode.put("ISP", "Long Island MacArthur Airport, Ronkonkoma, New York, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "MHT": departingAndCode.put("MHT", "Manchester – Boston Regional Airport, Manchester/Londonderry, New Hampshire, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "EWR": departingAndCode.put("EWR", "Newark Liberty International Airport, Newark/Elizabeth, New Jersey, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "PHL": departingAndCode.put("PHL", "Philadelphia International Airport, Philadelphia / Tinicum Township, Delaware County, Pennsylvania, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "PIT": departingAndCode.put("PIT", "Pittsburgh International Airport, Allegheny County, Pennsylvania, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "PWM": departingAndCode.put("PWM", "Portland International Jetport, Portland, Oregon, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "DCA": departingAndCode.put("DCA", "Ronald Reagan Washington National Airport, Crystal City, Arlington County, Virginia, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "RIC": departingAndCode.put("RIC", "Richmond International Airport, Sandston, Virginia, U.S.");
+            departingCodeValid=true;
+            return true;
+            case "PVD": departingAndCode.put("PVD", "Rhode Island-T.F. Green Airport, Warwick, Rhode Island U.S.");
+            departingCodeValid=true;
+            return true;
+            case "IAD": departingAndCode.put("IAD", "Washington Dulles International Airport, Dulles, Virginia, U.S.");
+            departingCodeValid=true;
+            return true;
             default: //Add all valid airport codes from array!
+            departingCodeValid=false;
             System.out.println("Invalid Airport Code: Please Try Again");
+            System.out.println("Valid Codes (denoted within braces)");
+            for (String validAirportCodes: majorAirportsNortheast) {
+            System.out.println("" + validAirportCodes); //Added all valid airport codes for airline routes.
         }
-       // departingAirportCode=airDepAirCo;
+         return false;
     }
-    public ArrayList <String> getDepartingAirportCode() { //Since the program will be return an arrayList, the approprioate wrapper class is needed.
-        //return departingAirportCode;
-        return departingAndCode;
+}
+     public String getDepartingAirportName() { //Since the program will be return an arrayList, the appropriate wrapper class is needed.
+        if(departingCodeValid && departingAndCode.containsKey(departingAirportCode)) {
+        return departingAndCode.get(departingAirportCode);
     } 
-     public void setArrivingAirportCode (String airArrAirCo) {
-         switch (airArrAirCo) {
-            
+    return null;
+}
+     public boolean setArrivingAirportCode (String airArrAirCo) { //Switched to boolean for validation
+         arrivingAirportCode=airArrAirCo;
+         switch (airArrAirCo) { //Switch statements based on airport code.
+            case "ACY": arrivingAndCode.put("ACY", "Atlantic City International Airport, Egg Harbor Township, New Jersey, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+           // break; break is not needed since the loop will stop when it returns tru
+            case "BWI": arrivingAndCode.put("BWI", "Baltimore/Washington International Thurgood Marshall Airport, Anne Arundel County, Maryland, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "BDL": arrivingAndCode.put("BDL", "Bradley International Airport, Windsor Locks, Connecticut, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "BUF": arrivingAndCode.put("BUF", "Buffalo Niagara International Airport, Cheektowaga, New York, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "JFK": arrivingAndCode.put("JFK", "John F Kennedy International Airport, Jamaica, Queens, New York City, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "LGA": arrivingAndCode.put("LGA", "LaGuardia Airport, East Elmhurst, Queens, New York City, New York, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "BOS": arrivingAndCode.put("BOS", "Boston Logan International Airport, Boston/Winthrop, Massachusetts, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "ISP": arrivingAndCode.put("ISP", "Long Island MacArthur Airport, Ronkonkoma, New York, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "MHT": arrivingAndCode.put("MHT", "Manchester – Boston Regional Airport, Manchester/Londonderry, New Hampshire, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "EWR": arrivingAndCode.put("EWR", "Newark Liberty International Airport, Newark/Elizabeth, New Jersey, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "PHL": arrivingAndCode.put("PHL", "Philadelphia International Airport, Philadelphia / Tinicum Township, Delaware County, Pennsylvania, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "PIT": arrivingAndCode.put("PIT", "Pittsburgh International Airport, Allegheny County, Pennsylvania, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "PWM": arrivingAndCode.put("PWM", "Portland International Jetport, Portland, Oregon, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "DCA": arrivingAndCode.put("DCA", "Ronald Reagan Washington National Airport, Crystal City, Arlington County, Virginia, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "RIC": arrivingAndCode.put("RIC", "Richmond International Airport, Sandston, Virginia, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "PVD": arrivingAndCode.put("PVD", "Rhode Island-T.F. Green Airport, Warwick, Rhode Island U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            case "IAD": arrivingAndCode.put("IAD", "Washington Dulles International Airport, Dulles, Virginia, U.S.");
+            arrivingCodeValid=true;         
+            return true;
+            default: 
+            arrivingCodeValid=false;
+            System.out.println("Invalid Airport Code: Please Try Again");
+            System.out.println("Valid Codes (denoted within braces)");
+            for (String validAirportCodes: majorAirportsNortheast) {
+            System.out.println("" + validAirportCodes); //Added all valid airport codes for airline routes.
         }
-        //arrivingAirportCode=airArrAirCo;
+        return false;
+    } 
     }
-    public ArrayList <String> getArrivingAirportCode() {
-        //return arrivingAirportCode;
-        return arrivingAndCode;
+    public String getArrivingAirportCode() {
+        if (arrivingCodeValid && arrivingAndCode.containsKey(arrivingAirportCode)) {
+        return arrivingAndCode.get(arrivingAirportCode);
     }
-   /*  public void setTime (String airTime) {
-        time=airTime;
-    }
-    public String getTime() { Not needed, from a previous version!
-        return time;
-    } */
+    return null;
+}
     public void setPriceCarryOn (int carryPri) { //Determines what the flyer must pay for carryons
        if (carryPri > 1) {
        price_1=carryPri * 55;
@@ -155,14 +239,14 @@ ArrayList <String> arrivingAndCode= new ArrayList<>();
       int totalPrice=price_2 + price_1;
       String price=priceChecker.format(totalPrice);
       System.out.println("Success! Thank you for using " + airline + "!" + "Here is the information for your upcoming trip: \n");
-      System.out.println(" NAME: " + name + "\n DATE: " + date +"\n DEPARTING: " + departingAndCode.get(0) + "\n AIRPORT: " + departingAirportCode + "\n ARRIVING: "
-      + arrivingLocation + "\nAIRPORT: " + arrivingAirportCode + "\n CARRYONS: " + carryOn + "\n BAGS: " + baggage); 
+      System.out.println(" NAME: " + name + "\n DATE(MM/DD/YYYY): " + date +"\n DEPARTING LOCATION: " + departingAndCode.get(departingAirportCode) + "\n DEPARTING AIRPORT CODE: " + departingAirportCode + "\n ARRIVING AIRPORT LOCATION: "
+      + arrivingAndCode.get(arrivingAirportCode) + "\n ARRIVING AIRPORT CODE: " + arrivingAirportCode+ "\n CARRYONS: " + carryOn + "\n BAGS: " + baggage); 
       System.out.println("\nSince you indicated you are carrying "  + baggage + " bag(s) and " + carryOn + " carry-on(s), you will pay: \n" + price_2 + " + " + price_1
       + "\nFor a total of: " + price);
+      System.out.println("Thank you for travelling with " + airline + "!");
       //To do, add gate number to ticket somehow.
     }
     //To-Do, add a way to check for appropriate flight departures and arrivals,
     //limited to northeast region!
     //To-Do: Randomly generate a user code, aswell as implement flight numbers aswell as verification that these exist.
 }
-//For testing with git.
