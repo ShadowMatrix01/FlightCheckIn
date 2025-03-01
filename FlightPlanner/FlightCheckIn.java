@@ -1,24 +1,29 @@
 
 /**
  * @Jhan Gomez
- * @Version 1.0.3 (a version number or a date)
+ * @Version 1.0.4 (a version number or a date)
  * @A simple program that demonstrates how a flight checkin would work in Java. */
 import java.util.Scanner;
 import java.util.InputMismatchException;
+import java.time.LocalDate; // Used to avoid confusion on ticket, user might think time from date is time of departure.
 import java.time.LocalDateTime; //Important for greeting the user and verification purposes! Date and time  is imported using the time package.
 import java.time.format.DateTimeFormatter;  //Important for formatting the date and time properly
-public class FlightCheckIn
+public class FlightCheckIn 
 {
     public static void main (String[]args) {
     Ticket ticket_1= new Ticket();
     TicketSpecial guide= new TicketSpecial();
     ticket_1.setAirline("USA Regional AIRPATH-Northeast");
+    //Important! The operator of the machine must set up the airline, this is case sensitive!
     Scanner checkIn=new Scanner(System.in); //Scanner moved for scope purposes
     try {
         LocalDateTime dateAndTime=LocalDateTime.now(); //Gets the date and time
+        LocalDate date=LocalDate.now(); //For ticket, onyl date not time.
+        DateTimeFormatter dateForm=DateTimeFormatter.ofPattern("MM-dd-yyyy");
         DateTimeFormatter dateAndTimeForm = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss"); //Formats the date and time into Month-Day-Year and readable hour, minute, and seconds
         String dateAndTime2=dateAndTime.format(dateAndTimeForm); //the formated date and time is saved to dateAndTime2 using the .format() method.
-        ticket_1.setDate(dateAndTime2);
+        String date2=date.format(dateForm); 
+        ticket_1.setDate(date2);//ticket is modified to have only the date and not the time passed in.
         System.out.println(dateAndTime2 + "." + "\n\nYou are logged in to the terminal for " +  ticket_1.getAirline() + ".");
         System.out.println("Welcome to " + ticket_1.getAirline() + ".");
         System.out.println("If you have any questions or issues with this machine, please contact a " + ticket_1.getAirline() + " employee for help.\n\n");
@@ -42,7 +47,7 @@ public class FlightCheckIn
         int carryOnPack=checkIn.nextInt();
         System.out.println("Enter the amount of bags (Maxmimum One Free): ");
         int bag=checkIn.nextInt();
-        System.out.println("Do you require special accomodations at the gate, plane, or airport? Please input either yes or no: ");
+        System.out.println("Do you require special accomodations at the gate, plane, or airport? \nPlease input either yes or no: ");
         String accomodations=checkIn.next();
         ticket_1.setBaggage(bag);
         ticket_1.setCarryOn(carryOnPack);
